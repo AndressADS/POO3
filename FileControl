@@ -1,0 +1,48 @@
+import java.util.ArrayList;
+import java.io.*;
+
+public class FileControl {
+  private String archiveName;
+
+  public FileControl(String archiveName) {
+    this.archiveName = archiveName; 
+  }
+   public String getArchiveName() {
+    return this.archiveName;
+  }
+
+  public boolean insert(String line){
+    try {
+      FileWriter fw = new FileWriter ( this.archiveName, true );
+        BufferedWriter bw = new BufferedWriter ( fw );
+        
+          bw.write ( line );
+          bw.newLine();
+          
+        bw.close();
+      fw.close();
+      return true;
+
+    } catch ( IOException e ) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  public ArrayList<String> getAll(){
+    ArrayList<String> lines = new ArrayList<>();
+
+    try {
+      BufferedReader br = new BufferedReader( new FileReader(this.archiveName) );
+        while( br.ready() ){
+          lines.add(br.readLine());
+        }
+      br.close();			
+		} catch( IOException e){
+      lines.add("ERROR");
+		}
+
+		return lines;
+		
+  }
+}
