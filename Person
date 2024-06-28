@@ -1,0 +1,98 @@
+import java.util.Scanner;
+import java.util.ArrayList;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+public class Person {
+    private static ArrayList<String> allPersons = new ArrayList<>();
+
+    public static void main(String[] params) {
+        Scanner scan = new Scanner(System.in);
+        int choice;
+
+        do {
+            showMenu();
+            choice = scan.nextInt();
+            scan.nextLine(); 
+
+            switch (choice) {
+                case 1:
+                    addPerson(scan);
+                    break;
+                case 2:
+                    removePerson(scan);
+                    break;
+                case 3:
+                    viewPersons();
+                    break;
+                case 4:
+                    System.out.println("Saindo...");
+                    break;
+                default:
+                    System.out.println("Opção inválida. Tente novamente.");
+                    break;
+            }
+        } while (choice != 4);
+    }
+
+    private static void showMenu() {
+        System.out.println("\n--- Menu ---");
+        System.out.println("1. Adicionar pessoa");
+        System.out.println("2. Remover pessoa");
+        System.out.println("3. Visualizar pessoas");
+        System.out.println("4. Sair");
+        System.out.print("Escolha uma opção: ");
+    }
+
+    private static void addPerson(Scanner scan) {
+        System.out.print("Digite o nome: ");
+        String name = scan.nextLine();
+        System.out.print("Digite a data de nascimento (ddMMyyyy): ");
+        String birthdayStr = scan.nextLine();
+        System.out.print("Digite o gênero: ");
+        String gender = scan.nextLine();
+        System.out.print("Digite a cidade de nascimento: ");
+        String birthCity = scan.nextLine();
+
+        LocalDate birthday = LocalDate.parse(birthdayStr, DateTimeFormatter.ofPattern("ddMMyyyy"));
+        String personData = name + ";" + birthday.format(DateTimeFormatter.ofPattern("dd/MM/yyyy")) + ";" + gender + ";" + birthCity;
+        allPersons.add(personData);
+        System.out.println("Pessoa adicionada com sucesso!");
+    }
+
+    private static void removePerson(Scanner scan) {
+        System.out.print("Digite o nome da pessoa a ser removida: ");
+        String name = scan.nextLine();
+
+        boolean removed = false;
+        for (int i = 0; i < allPersons.size(); i++) {
+            String[] personAttributes = allPersons.get(i).split(";");
+            if (personAttributes[0].equalsIgnoreCase(name)) {
+                allPersons.remove(i);
+                System.out.println("Pessoa removida com sucesso!");
+                removed = true;
+                break;
+            }
+        }
+
+        if (!removed) {
+            System.out.println("Pessoa não encontrada.");
+        }
+    }
+
+    private static void viewPersons() {
+        System.out.println("\n--- Pessoas cadastradas ---");
+        for (String personData : allPersons) {
+            String[] personAttributes = personData.split(";");
+            if (personAttributes.length == 4) {
+                System.out.println("Nome: " + personAttributes[0]);
+                System.out.println("Data de nascimento: " + personAttributes[1]);
+                System.out.println("Gênero: " + personAttributes[2]);
+                System.out.println("Cidade de nascimento: " + personAttributes[3]);
+                System.out.println("---");
+            } else {
+                System.out.println("Dados incompletos para a pessoa: " + personData);
+            }
+        }
+    }
+}
