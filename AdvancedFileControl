@@ -1,0 +1,57 @@
+import java.util.ArrayList;
+import java.io.*;
+
+public class AdvancedFileControl extends FileControl {
+    public AdvancedFileControl(String archiveName) {
+        super(archiveName);
+    }
+
+    public boolean insertMultipleLines(ArrayList<String> lines) {
+        try {
+            FileWriter fw = new FileWriter(this.getArchiveName(), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (String line : lines) {
+                bw.write(line);
+                bw.newLine();
+            }
+
+            bw.close();
+            fw.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public boolean insertMultipleLines(ArrayList<String> names, ArrayList<String> cities) {
+        try {
+            FileWriter fw = new FileWriter(this.getArchiveName(), true);
+            BufferedWriter bw = new BufferedWriter(fw);
+
+            for (int i = 0; i < names.size(); i++) {
+                bw.write(names.get(i) + ", " + cities.get(i));
+                bw.newLine();
+            }
+
+            bw.close();
+            fw.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public ArrayList<String> getAllReversed() {
+        ArrayList<String> lines = getAll();
+        ArrayList<String> reversedLines = new ArrayList<>();
+
+        for (int i = lines.size() - 1; i >= 0; i--) {
+            reversedLines.add(lines.get(i));
+        }
+
+        return reversedLines;
+    }
+}
